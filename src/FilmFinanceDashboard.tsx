@@ -469,7 +469,7 @@ export default function App() {
               textShadow: '0 2px 20px rgba(0,0,0,0.8)',
               margin: '0 0 10px 0',
             }}>
-              BUILD YOUR <span style={{ color: '#D4AF37', textShadow: '0 0 40px rgba(212,175,55,0.40)' }}>DEAL</span>
+              BUILD YOUR <span style={{ color: '#D4AF37', textShadow: '0 0 40px rgba(212,175,55,0.40)' }}>MODEL</span>
             </h1>
             <p style={{
               fontFamily: "'Inter', sans-serif",
