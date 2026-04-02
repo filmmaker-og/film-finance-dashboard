@@ -7,19 +7,58 @@ import {
 
 /* ═══ TOKENS ═══ */
 const T = {
-  bg: "#000", glass: "rgba(6,6,6,0.85)", glassBright: "rgba(12,12,14,0.92)", glassRecessed: "rgba(3,3,3,0.78)",
-  gold: "#D4AF37", goldBright: "#F9E076", goldDim: "rgba(212,175,55,0.25)", goldGhost: "rgba(212,175,55,0.08)",
-  purple: "rgba(120,60,180,1)", green: "#3CB371", greenDim: "rgba(60,179,113,0.15)",
-  red: "rgba(220,38,38,1)", redDim: "rgba(220,38,38,0.15)",
-  amber: "#F59E0B", amberDim: "rgba(245,158,11,0.15)",
-  equity: "#E0A030",
-  blue: "#3B82F6",
-  w92: "rgba(255,255,255,0.92)", w75: "rgba(255,255,255,0.75)",
-  w55: "rgba(255,255,255,0.55)", w40: "rgba(255,255,255,0.40)", w25: "rgba(255,255,255,0.25)",
-  radius: "12px", border: "rgba(212,175,55,0.12)", borderBright: "rgba(212,175,55,0.28)",
-  inputBg: "rgba(212,175,55,0.05)", inputBorder: "rgba(212,175,55,0.18)",
+  // Backgrounds
+  bg: '#0C0C0E',
+  elevated: '#222226',
+  header: '#1A1A1C',
+
+  // Gold
+  gold: '#D4AF37',
+  goldCTA: '#F9E076',
+  goldDim: 'rgba(212,175,55,0.25)',
+  goldGhost: 'rgba(212,175,55,0.08)',
+  goldGlow: '0 0 20px rgba(212,175,55,0.25)',
+
+  // Text
+  w92: 'rgba(255,255,255,0.92)',
+  w75: 'rgba(255,255,255,0.75)',
+  w55: 'rgba(255,255,255,0.55)',
+  w40: 'rgba(255,255,255,0.40)',
+  w25: 'rgba(255,255,255,0.25)',
+
+  // Semantic
+  green: '#4DAF78',
+  greenDim: 'rgba(77,175,120,0.15)',
+  red: '#C84040',
+  redDim: 'rgba(200,64,64,0.15)',
+  amber: '#F0A830',
+  amberDim: 'rgba(240,168,48,0.15)',
+  purple: 'rgba(120,60,180,1)',
+  blue: '#3B82F6',
+
+  // Borders
+  border: 'rgba(212,175,55,0.12)',
+  borderBright: 'rgba(212,175,55,0.25)',
+  borderSubtle: 'rgba(255,255,255,0.08)',
+
+  // Fonts
+  fontDisplay: "'Bebas Neue', sans-serif",
+  fontMono: "'Roboto Mono', monospace",
+  fontBody: "'Inter', sans-serif",
+
+  // Legacy aliases (keep these so existing references still work)
+  glass: '#222226',
+  glassBright: '#222226',
+  glassRecessed: '#1A1A1C',
+  goldBright: '#F9E076',
+  equity: '#D4AF37',
+  w65: 'rgba(255,255,255,0.65)',
+  radius: '8px',
+  borderTop: 'rgba(255,255,255,0.18)',
+  inputBg: 'rgba(212,175,55,0.05)',
+  inputBorder: 'rgba(212,175,55,0.18)',
 };
-const F = { display: "'Bebas Neue',sans-serif", body: "'Inter',sans-serif", mono: "'Roboto Mono',monospace" };
+const F = { display: "'Bebas Neue', sans-serif", body: "'Inter', sans-serif", mono: "'Roboto Mono', monospace" };
 const grainSVG = `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E")`;
 
 /* ═══ STATE TAX CREDITS ═══ */
@@ -191,23 +230,57 @@ const CL = { ATL: "Above the Line", BTL: "Below the Line — Production", Post: 
 
 /* ═══ UI COMPONENTS ═══ */
 const Glass = ({ children, style, tier = "standard", ...p }) => {
-  const bg = tier === "primary" ? T.glassBright : tier === "recessed" ? T.glassRecessed : T.glass;
-  const bd = tier === "primary" ? T.borderBright : T.border;
-  return <div style={{ background: bg, border: `1px solid ${bd}`, borderRadius: T.radius, padding: "24px", ...style }} {...p}>{children}</div>;
+  return (
+    <div style={{
+      background: '#222226',
+      border: '1px solid rgba(255,255,255,0.10)',
+      borderTop: '1px solid rgba(255,255,255,0.18)',
+      borderRadius: '8px',
+      boxShadow: '0 6px 28px rgba(0,0,0,0.50), 0 0 1px rgba(255,255,255,0.04)',
+      overflow: 'hidden',
+      position: 'relative',
+      padding: "24px",
+      ...style
+    }} {...p}>
+      <div style={{
+        position: 'absolute', top: 0, left: 0, right: 0, height: '1px',
+        background: 'linear-gradient(90deg, transparent, rgba(212,175,55,0.40), transparent)'
+      }} />
+      {children}
+    </div>
+  );
 };
 const SL = ({ children, sub }) => (
   <div style={{ marginBottom: sub ? "14px" : "8px" }}>
-    <div style={{ fontFamily: F.display, fontSize: "14px", letterSpacing: "5px", color: T.gold, textTransform: "uppercase", opacity: 0.7 }}>{children}</div>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 }}>
+      <div style={{ flex: 1, height: 1, background: 'rgba(212,175,55,0.30)' }} />
+      <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: 11, letterSpacing: '0.15em', textTransform: 'uppercase' as const, color: '#D4AF37', whiteSpace: 'nowrap' }}>{children}</span>
+      <div style={{ flex: 1, height: 1, background: 'rgba(212,175,55,0.30)' }} />
+    </div>
     {sub && <div style={{ fontFamily: F.body, fontSize: "13px", color: T.w40, marginTop: "6px", lineHeight: 1.5, maxWidth: "640px" }}>{sub}</div>}
   </div>
 );
 const KPI = ({ label, value, sub, color, explain }) => (
-  <Glass style={{ textAlign: "center", flex: 1, minWidth: "160px", padding: "20px 16px" }}>
-    <div style={{ fontFamily: F.mono, fontSize: "11px", color: T.w55, letterSpacing: "1.5px", textTransform: "uppercase", marginBottom: "10px" }}>{label}</div>
-    <div style={{ fontFamily: F.display, fontSize: "34px", color: color || T.w92, lineHeight: 1 }}>{value}</div>
+  <div style={{
+    background: '#222226',
+    border: '1px solid rgba(255,255,255,0.08)',
+    borderRadius: '8px',
+    padding: '16px',
+    textAlign: 'center',
+    flex: 1,
+    minWidth: '160px',
+    position: 'relative',
+    overflow: 'hidden',
+  }}>
+    <div style={{
+      position: 'absolute', top: 0, left: 0, right: 0, height: '1px',
+      background: 'linear-gradient(90deg, transparent, rgba(212,175,55,0.40), transparent)'
+    }} />
+    <div style={{ fontFamily: "'Roboto Mono', monospace", fontSize: '10px', color: 'rgba(255,255,255,0.40)', letterSpacing: '0.12em', textTransform: 'uppercase' as const, marginBottom: '10px' }}>{label}</div>
+    <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: '28px', color: color || '#D4AF37', lineHeight: 1, textShadow: '0 0 20px rgba(212,175,55,0.25)' }}>{value}</div>
     {sub && <div style={{ fontFamily: F.mono, fontSize: "11px", color: T.w40, marginTop: "8px" }}>{sub}</div>}
     {explain && <div style={{ fontFamily: F.body, fontSize: "11px", color: T.w25, marginTop: "8px", fontStyle: "italic", lineHeight: 1.4 }}>{explain}</div>}
-  </Glass>
+  </div>
 );
 const Divider = () => <div style={{ height: "1px", background: `linear-gradient(90deg,transparent 10%,${T.goldDim} 50%,transparent 90%)`, margin: "12px 0" }} />;
 const TABS = [
@@ -217,8 +290,29 @@ const TABS = [
   { id: "sensitivity", label: "Sensitivity", tier: 2 }, { id: "risk", label: "Risk", tier: 2 },
 ];
 const TIER_LABELS = ["START HERE", "THE DEAL", "DEEP DIVE"];
-const TBtn = ({ active, children, onClick }) => (
-  <button onClick={onClick} style={{ fontFamily: F.display, fontSize: "13px", letterSpacing: "2px", textTransform: "uppercase", background: active ? T.goldGhost : "transparent", color: active ? T.gold : T.w55, border: `1px solid ${active ? T.goldDim : "transparent"}`, borderRadius: "8px", padding: "8px 16px", cursor: "pointer", transition: "all 0.2s", whiteSpace: "nowrap" }}>{children}</button>
+const TBtn = ({ active, children, onClick, locked = false }) => (
+  <button onClick={locked ? undefined : onClick} style={{
+    fontFamily: "'Bebas Neue', sans-serif",
+    fontSize: "13px",
+    letterSpacing: "0.08em",
+    textTransform: "uppercase" as const,
+    background: "transparent",
+    color: active ? '#D4AF37' : locked ? 'rgba(255,255,255,0.40)' : 'rgba(255,255,255,0.40)',
+    border: 'none',
+    borderBottom: active ? '2px solid #D4AF37' : '2px solid transparent',
+    borderRadius: "0",
+    padding: "8px 16px",
+    cursor: locked ? "not-allowed" : "pointer",
+    transition: "all 0.2s",
+    whiteSpace: "nowrap" as const,
+    opacity: locked ? 0.35 : 1,
+    display: "flex",
+    alignItems: "center",
+    gap: 6,
+  }}>
+    {locked && <span style={{ fontSize: "10px" }}>🔒</span>}
+    {children}
+  </button>
 );
 
 /* Combo Input — text field + slider + benchmark band */
@@ -306,7 +400,7 @@ export default function App() {
   const wfCon = useMemo(() => d.calcWF(d.rt.conservative), [d]);
   const wfUp = useMemo(() => d.calcWF(d.rt.upside), [d]);
   const wb = useMemo(() => {
-    const items = [{ n: "Gross Rev", v: wf.gr, f: T.gold, t: "total" }, { n: "Exhibitor", v: wf.et, f: "rgba(220,38,38,0.5)", t: "loss" }, { n: "P&A", v: wf.pa, f: "rgba(220,38,38,0.5)", t: "loss" }, { n: "Dist Fee", v: wf.df, f: "rgba(220,38,38,0.5)", t: "loss" }, { n: "SA Comm", v: wf.sc, f: "rgba(220,38,38,0.5)", t: "loss" }, { n: "Debt", v: wf.dr + wf.gp, f: "rgba(220,38,38,0.5)", t: "loss" }, { n: "Recoup", v: wf.ir, f: T.goldDim, t: "loss" }, { n: "Inv Back", v: wf.ib, f: T.green, t: "gain" }, { n: "Prod Back", v: wf.pb, f: T.purple, t: "gain" }].filter(i => i.v > 0 || i.t === "total");
+    const items = [{ n: "Gross Rev", v: wf.gr, f: T.gold, t: "total" }, { n: "Exhibitor", v: wf.et, f: T.red, t: "loss" }, { n: "P&A", v: wf.pa, f: T.red, t: "loss" }, { n: "Dist Fee", v: wf.df, f: T.red, t: "loss" }, { n: "SA Comm", v: wf.sc, f: T.red, t: "loss" }, { n: "Debt", v: wf.dr + wf.gp, f: T.red, t: "loss" }, { n: "Recoup", v: wf.ir, f: T.goldDim, t: "loss" }, { n: "Inv Back", v: wf.ib, f: T.green, t: "gain" }, { n: "Prod Back", v: wf.pb, f: T.purple, t: "gain" }].filter(i => i.v > 0 || i.t === "total");
     let r = 0; return items.map(i => { if (i.t === "total") { r = i.v; return { name: i.n, base: 0, value: i.v, fill: i.f }; } else if (i.t === "loss") { r -= i.v; return { name: i.n, base: Math.max(0, r), value: i.v, fill: i.f }; } else { return { name: i.n, base: 0, value: i.v, fill: i.f }; } });
   }, [wf]);
   const sR = [500000, 1000000, 1500000, 2500000, 3500000, 5000000];
@@ -350,11 +444,55 @@ export default function App() {
       <div style={contentStyle}>
         {/* SETUP */}
         {tid === "setup" && <div style={{ maxWidth: "580px", margin: "0 auto" }}><Glass tier="primary">
-          <div style={{ textAlign: "center", marginBottom: "12px" }}>
-            <div style={{ fontFamily: F.display, fontSize: "26px", color: T.w92 }}>BUILD YOUR MODEL</div>
-            <div style={{ fontFamily: F.body, fontSize: "13px", color: T.w40, marginTop: "6px" }}>Step {wizStep + 1} of 4 — {wizSteps[wizStep]}</div>
+          {/* HERO SECTION */}
+          <div style={{
+            textAlign: 'center',
+            paddingBottom: 24,
+            borderBottom: '1px solid rgba(212,175,55,0.12)',
+            marginBottom: 28,
+          }}>
+            <div style={{
+              display: 'flex', alignItems: 'center', gap: 12,
+              justifyContent: 'center', marginBottom: 12,
+            }}>
+              <div style={{ flex: 1, height: 1, background: 'rgba(212,175,55,0.35)' }} />
+              <span style={{ fontFamily: "'Roboto Mono', monospace", fontSize: 11, letterSpacing: '0.18em', textTransform: 'uppercase' as const, color: 'rgba(212,175,55,0.75)' }}>FILM FINANCE SIMULATOR</span>
+              <div style={{ flex: 1, height: 1, background: 'rgba(212,175,55,0.35)' }} />
+            </div>
+            <h1 style={{
+              fontFamily: "'Bebas Neue', sans-serif",
+              fontSize: 'clamp(2.4rem, 6vw, 3.6rem)',
+              letterSpacing: '0.04em',
+              color: '#fff',
+              lineHeight: 0.95,
+              marginBottom: 10,
+              textShadow: '0 2px 20px rgba(0,0,0,0.8)',
+              margin: '0 0 10px 0',
+            }}>
+              BUILD YOUR <span style={{ color: '#D4AF37', textShadow: '0 0 40px rgba(212,175,55,0.40)' }}>DEAL</span>
+            </h1>
+            <p style={{
+              fontFamily: "'Inter', sans-serif",
+              fontSize: 15,
+              color: 'rgba(255,255,255,0.65)',
+              lineHeight: 1.5,
+              maxWidth: 400,
+              margin: '0 auto',
+            }}>Know exactly who gets paid, how much, and when — before you sign.</p>
           </div>
-          <div style={{ height: "3px", background: T.goldGhost, borderRadius: "2px", margin: "16px 0 28px", overflow: "hidden" }}><div style={{ height: "100%", width: `${((wizStep + 1) / 4) * 100}%`, background: `linear-gradient(90deg,${T.gold},${T.goldBright})`, borderRadius: "2px", transition: "width 0.3s" }} /></div>
+          {/* STEP PROGRESS BAR */}
+          <div style={{ display: 'flex', gap: 3, marginBottom: 20, height: 3 }}>
+            {wizSteps.map((step, i) => (
+              <div key={step} style={{
+                flex: 1, borderRadius: 2,
+                background: i < wizStep ? 'rgba(212,175,55,0.50)' : i === wizStep ? 'rgba(212,175,55,0.60)' : 'rgba(255,255,255,0.08)',
+                transition: 'background 0.4s',
+              }} />
+            ))}
+          </div>
+          <div style={{ textAlign: "center", marginBottom: "12px" }}>
+            <div style={{ fontFamily: F.body, fontSize: "13px", color: T.w40 }}>Step {wizStep + 1} of 4 — {wizSteps[wizStep]}</div>
+          </div>
 
           {wizStep === 0 && <>
             <TextInput label="Project Title" value={inp.title} onChange={v => s("title", v)} explain="As it appears in legal documents and pitch materials" />
@@ -381,8 +519,8 @@ export default function App() {
             <ComboInput label="Gap / Mezz Financing" value={inp.gapMezz} onChange={v => s("gapMezz", v)} min={0} max={Math.round(inp.totalBudget * .2)} step={10000} suffix="" fmt={fmt} explain="Second-priority loan. Most projects don't need it." />
             <ComboInput label="Pre-Sale Loan" value={inp.preSaleLoan} onChange={v => s("preSaleLoan", v)} min={0} max={Math.round(inp.totalBudget * .25)} step={10000} suffix="" fmt={fmt} explain="Requires a sales agent with executed MGs. $0 if none." />
             <div style={{ background: T.goldGhost, border: `2px solid ${T.goldDim}`, borderRadius: "12px", padding: "20px", textAlign: "center", margin: "12px 0" }}>
-              <div style={{ fontFamily: F.mono, fontSize: "10px", color: T.w55, letterSpacing: "2px" }}>EQUITY RAISE NEEDED</div>
-              <div style={{ fontFamily: F.display, fontSize: "48px", color: T.equity, lineHeight: 1.1, marginTop: "6px" }}>{fF(d.eq)}</div>
+              <div style={{ fontFamily: "'Roboto Mono', monospace", fontSize: "10px", color: T.w55, letterSpacing: "0.12em", textTransform: "uppercase" as const }}>EQUITY RAISE NEEDED</div>
+              <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "48px", color: '#D4AF37', lineHeight: 1.1, marginTop: "6px", textShadow: '0 0 20px rgba(212,175,55,0.25)' }}>{fF(d.eq)}</div>
               <div style={{ fontFamily: F.body, fontSize: "12px", color: T.w40, marginTop: "8px" }}>Cash needed from investors</div>
               <div style={{ fontFamily: F.mono, fontSize: "11px", color: T.w25, marginTop: "4px" }}>~{d.estInv} investors at {fF(inp.minInvestment)} min</div>
             </div>
@@ -417,7 +555,7 @@ export default function App() {
 
           {wizStep === 3 && <>
             <div style={{ fontFamily: F.body, fontSize: "13px", color: T.w55, marginBottom: "16px" }}>Choose a strategy to auto-fill, then adjust.</div>
-            <div style={{ display: "flex", gap: "10px", marginBottom: "24px" }}>{Object.keys(DIST_PRESETS).map(n => <button key={n} onClick={() => applyDistPreset(n)} style={{ flex: 1, background: distPreset === n ? T.goldGhost : "transparent", border: `1px solid ${distPreset === n ? T.goldDim : T.goldGhost}`, borderRadius: "10px", padding: "12px", cursor: "pointer", textAlign: "left" }}><div style={{ fontFamily: F.mono, fontSize: "11px", color: distPreset === n ? T.gold : T.w55, fontWeight: 600 }}>{n}</div><div style={{ fontFamily: F.body, fontSize: "10px", color: T.w25, marginTop: "4px", lineHeight: 1.4 }}>{DIST_PRESETS[n].desc}</div></button>)}</div>
+            <div style={{ display: "flex", gap: "10px", marginBottom: "24px" }}>{Object.keys(DIST_PRESETS).map(n => <button key={n} onClick={() => applyDistPreset(n)} style={{ flex: 1, border: `1px solid ${distPreset === n ? 'rgba(212,175,55,0.45)' : 'rgba(212,175,55,0.20)'}`, borderRadius: '8px', background: distPreset === n ? 'rgba(212,175,55,0.10)' : 'rgba(212,175,55,0.05)', padding: '12px 16px', cursor: 'pointer', textAlign: 'left', transition: 'border-color 0.2s, background 0.2s' }}><div style={{ fontFamily: F.mono, fontSize: "11px", color: distPreset === n ? T.gold : T.w55, fontWeight: 600 }}>{n}</div><div style={{ fontFamily: F.body, fontSize: "10px", color: T.w25, marginTop: "4px", lineHeight: 1.4 }}>{DIST_PRESETS[n].desc}</div></button>)}</div>
             <ComboInput label="Exhibitor Split" value={inp.exhibitorPct} onChange={v => s("exhibitorPct", v)} min={0} max={60} explain="Theater's cut. 0% for streaming-only." benchMin={45} benchMax={55} />
             <ComboInput label="P&A / Marketing" value={inp.paBudget} onChange={v => s("paBudget", v)} min={0} max={Math.round(inp.totalBudget * .5)} step={10000} suffix="" fmt={fmt} explain="Distributor's spend recouped from revenue — not your check. $0 for streaming." />
             <ComboInput label="Distribution Fee" value={inp.distFeePct} onChange={v => s("distFeePct", v)} min={10} max={40} explain="Distributor's commission. 25-35% typical." benchMin={25} benchMax={35} />
@@ -426,10 +564,10 @@ export default function App() {
           </>}
 
           <div style={{ display: "flex", gap: "12px", marginTop: "24px" }}>
-            {wizStep > 0 && <button onClick={() => setWizStep(w => w - 1)} style={{ flex: 1, padding: "16px", background: "transparent", border: `1px solid ${T.goldDim}`, borderRadius: "10px", fontFamily: F.display, fontSize: "16px", letterSpacing: "2px", color: T.gold, cursor: "pointer" }}>← BACK</button>}
+            {wizStep > 0 && <button onClick={() => setWizStep(w => w - 1)} style={{ flex: 1, padding: "14px 28px", background: "transparent", border: `1px solid ${T.goldDim}`, borderRadius: "6px", fontFamily: "'Roboto Mono', monospace", fontSize: "14px", fontWeight: 700, letterSpacing: "0.10em", textTransform: "uppercase" as const, color: T.gold, cursor: "pointer", transition: "transform 0.15s, box-shadow 0.2s" }}>← BACK</button>}
             {wizStep < 3
-              ? <button onClick={() => setWizStep(w => w + 1)} style={{ flex: 1, padding: "16px", background: T.goldGhost, border: `1px solid ${T.goldDim}`, borderRadius: "10px", fontFamily: F.display, fontSize: "16px", letterSpacing: "2px", color: T.gold, cursor: "pointer" }}>NEXT →</button>
-              : <button onClick={() => switchTab(1)} style={{ flex: 1, padding: "16px", background: `linear-gradient(135deg,${T.gold},${T.goldBright})`, border: "none", borderRadius: "10px", fontFamily: F.display, fontSize: "18px", letterSpacing: "3px", color: "#000", cursor: "pointer", fontWeight: 700 }}>VIEW YOUR DEAL →</button>}
+              ? <button onClick={() => setWizStep(w => w + 1)} style={{ flex: 1, background: '#F9E076', color: '#000', fontFamily: "'Roboto Mono', monospace", fontWeight: 700, letterSpacing: '0.10em', textTransform: 'uppercase' as const, padding: '14px 28px', borderRadius: '6px', border: 'none', cursor: 'pointer', boxShadow: '0 0 20px rgba(249,224,118,0.25)', transition: 'transform 0.15s, box-shadow 0.2s', fontSize: '14px' }}>NEXT →</button>
+              : <button onClick={() => switchTab(1)} style={{ flex: 1, background: '#F9E076', color: '#000', fontFamily: "'Roboto Mono', monospace", fontWeight: 700, letterSpacing: '0.10em', textTransform: 'uppercase' as const, padding: '14px 28px', borderRadius: '6px', border: 'none', cursor: 'pointer', boxShadow: '0 0 20px rgba(249,224,118,0.25)', transition: 'transform 0.15s, box-shadow 0.2s', fontSize: '14px' }}>VIEW YOUR DEAL →</button>}
           </div>
         </Glass></div>}
 
@@ -472,7 +610,7 @@ export default function App() {
             <div style={{ fontFamily: F.body, fontSize: "12px", color: T.w40, marginTop: "12px", fontStyle: "italic" }}>Stress-tested range: total loss to {wfUp.moic.toFixed(1)}×.</div>
           </Glass>
           <div style={{ fontFamily: F.body, fontSize: "11px", color: T.w25, textAlign: "center", lineHeight: 1.5, maxWidth: "520px", margin: "0 auto" }}>Illustrative projections from genre-comparable data. Not financial, legal, or tax advice. Verify with qualified professionals.</div>
-          <div style={{ textAlign: "center", marginTop: "8px" }}><button onClick={() => switchTab(2)} style={{ background: "transparent", border: `1px solid ${T.goldDim}`, borderRadius: "8px", padding: "12px 28px", fontFamily: F.display, fontSize: "14px", letterSpacing: "3px", color: T.gold, cursor: "pointer" }}>EXPLORE FULL MODEL →</button></div>
+          <div style={{ textAlign: "center", marginTop: "8px" }}><button onClick={() => switchTab(2)} style={{ background: '#F9E076', color: '#000', fontFamily: "'Roboto Mono', monospace", fontWeight: 700, letterSpacing: '0.10em', textTransform: 'uppercase' as const, padding: '14px 28px', borderRadius: '6px', border: 'none', cursor: 'pointer', boxShadow: '0 0 20px rgba(249,224,118,0.25)', transition: 'transform 0.15s, box-shadow 0.2s', fontSize: '13px' }}>EXPLORE FULL MODEL →</button></div>
         </div>}
 
         {/* OVERVIEW */}
@@ -492,7 +630,7 @@ export default function App() {
           <Glass tier="primary"><SL>Revenue Scenario</SL>
             <div style={{ fontFamily: F.mono, fontSize: "12px", color: T.w55, marginBottom: "8px" }}>Gross: <span style={{ color: T.gold, fontSize: "22px", fontFamily: F.display }}>{fF(scenario)}</span></div>
             <input type="range" min={250000} max={Math.max(1e7, inp.totalBudget * 5)} step={50000} value={scenario} onChange={e => setScenario(Number(e.target.value))} style={{ width: "100%", accentColor: T.gold, height: "4px", cursor: "pointer" }} />
-            <div style={{ display: "flex", gap: "10px", marginTop: "14px" }}>{[{ l: "Conservative", v: d.rt.conservative, desc: "Soft market", moic: wfCon.moic }, { l: "Base Case", v: d.rt.base, desc: "Standard acquisition", moic: wfBase.moic }, { l: "Upside", v: d.rt.upside, desc: "Competitive bidding", moic: wfUp.moic }].map(x => <button key={x.l} onClick={() => setScenario(x.v)} style={{ flex: 1, background: scenario === x.v ? T.goldGhost : "transparent", border: `1px solid ${scenario === x.v ? T.goldDim : T.goldGhost}`, borderLeft: scenario === x.v ? `3px solid ${T.gold}` : undefined, borderRadius: "10px", padding: "14px", cursor: "pointer", textAlign: "left" }}><div style={{ fontFamily: F.mono, fontSize: "12px", color: scenario === x.v ? T.gold : T.w55, fontWeight: 600 }}>{x.l}</div><div style={{ fontFamily: F.display, fontSize: "22px", color: scenario === x.v ? T.w92 : T.w55, marginTop: "4px" }}>{fmt(x.v)}</div><div style={{ fontFamily: F.mono, fontSize: "11px", color: x.moic >= 1 ? T.green : T.red, marginTop: "4px" }}>{x.moic.toFixed(2)}× MOIC</div><div style={{ fontFamily: F.body, fontSize: "10px", color: T.w25, marginTop: "4px" }}>{x.desc}</div></button>)}</div>
+            <div style={{ display: "flex", gap: "10px", marginTop: "14px" }}>{[{ l: "Conservative", v: d.rt.conservative, desc: "Soft market", moic: wfCon.moic }, { l: "Base Case", v: d.rt.base, desc: "Standard acquisition", moic: wfBase.moic }, { l: "Upside", v: d.rt.upside, desc: "Competitive bidding", moic: wfUp.moic }].map(x => <button key={x.l} onClick={() => setScenario(x.v)} style={{ flex: 1, border: `1px solid ${scenario === x.v ? 'rgba(212,175,55,0.45)' : 'rgba(212,175,55,0.20)'}`, borderRadius: '8px', background: scenario === x.v ? 'rgba(212,175,55,0.10)' : 'rgba(212,175,55,0.05)', padding: '12px 16px', cursor: 'pointer', textAlign: 'left', transition: 'border-color 0.2s, background 0.2s' }}><div style={{ fontFamily: F.mono, fontSize: "12px", color: scenario === x.v ? T.gold : T.w55, fontWeight: 600 }}>{x.l}</div><div style={{ fontFamily: F.display, fontSize: "22px", color: scenario === x.v ? T.w92 : T.w55, marginTop: "4px" }}>{fmt(x.v)}</div><div style={{ fontFamily: F.mono, fontSize: "11px", color: x.moic >= 1 ? T.green : T.red, marginTop: "4px" }}>{x.moic.toFixed(2)}× MOIC</div><div style={{ fontFamily: F.body, fontSize: "10px", color: T.w25, marginTop: "4px" }}>{x.desc}</div></button>)}</div>
           </Glass>
           <Glass><SL>Waterfall Bridge</SL><div style={{ width: "100%", height: 340, marginTop: "8px" }}><ResponsiveContainer><BarChart data={wb} margin={{ left: 10, right: 10, top: 10, bottom: 35 }}><CartesianGrid horizontal vertical={false} stroke="rgba(255,255,255,0.03)" /><XAxis dataKey="name" tick={{ fill: T.w25, fontSize: 10, fontFamily: F.mono }} angle={-30} textAnchor="end" height={55} /><YAxis tick={{ fill: T.w25, fontSize: 10, fontFamily: F.mono }} tickFormatter={fmt} /><Tooltip content={<CTT />} /><Bar dataKey="base" stackId="a" fill="transparent" /><Bar dataKey="value" stackId="a" radius={[4, 4, 0, 0]}>{wb.map((d, i) => <Cell key={i} fill={d.fill} />)}</Bar></BarChart></ResponsiveContainer></div></Glass>
           <div style={{ display: "flex", gap: "14px", flexWrap: "wrap" }}><KPI label="Investor Return" value={fmt(wf.tr)} color={wf.tr >= d.eq ? T.green : T.red} /><KPI label="MOIC" value={wf.moic.toFixed(2) + "×"} color={wf.moic >= 1 ? T.green : T.red} /><KPI label="ROI" value={pct(wf.roi)} color={wf.roi >= 0 ? T.green : T.red} /><KPI label="Producer Net" value={fmt(wf.pb)} color={T.purple} /></div>
