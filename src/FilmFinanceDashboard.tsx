@@ -155,11 +155,11 @@ function derive(inp, budgetEdits, bondOn, bondPct) {
   const rt = { conservative: rw.reduce((s, r) => s + r.conservative, 0) + tc, base: rw.reduce((s, r) => s + r.base, 0) + tc, upside: rw.reduce((s, r) => s + r.upside, 0) + tc };
   function calcWF(gr) {
     const hasTh = inp.paBudget > 0;
-    const et = hasTh ? gr * .5 * (inp.exhibitorPct / 100) : 0;
+    const et = hasTh ? gr * (inp.exhibitorPct / 100) : 0;
     const ap = gr - et - inp.paBudget;
     const df = Math.max(0, ap) * (inp.distFeePct / 100);
     const ad = Math.max(0, ap - df);
-    const sc = gr * .3 * (inp.saCommPct / 100);
+    const sc = gr * (inp.saCommPct / 100);
     const npp = Math.max(0, ad - sc);
     const dr = sd * (1 + inp.seniorDebtRate / 100 * inp.loanTerm / 12);
     const gp = inp.gapMezz * (1 + inp.gapRate / 100 * inp.loanTerm / 12);
@@ -176,21 +176,21 @@ function derive(inp, budgetEdits, bondOn, bondPct) {
   const cf = [
     { month: "Mo 1", inflows: eq + sd, outflows: -Math.round(actualBudget * .094), phase: "Pre-Prod" },
     { month: "Mo 2", inflows: 0, outflows: -Math.round(actualBudget * .068), phase: "Pre-Prod" },
-    { month: "Mo 3", inflows: 0, outflows: -Math.round(actualBudget * .158), phase: "Production" },
-    { month: "Mo 4", inflows: 0, outflows: -Math.round(actualBudget * .158), phase: "Production" },
-    { month: "Mo 5", inflows: 0, outflows: -Math.round(actualBudget * .108), phase: "Production" },
-    { month: "Mo 6", inflows: 0, outflows: -Math.round(actualBudget * .108), phase: "Post" },
+    { month: "Mo 3", inflows: 0, outflows: -Math.round(actualBudget * .173), phase: "Production" },
+    { month: "Mo 4", inflows: 0, outflows: -Math.round(actualBudget * .173), phase: "Production" },
+    { month: "Mo 5", inflows: 0, outflows: -Math.round(actualBudget * .123), phase: "Production" },
+    { month: "Mo 6", inflows: 0, outflows: -Math.round(actualBudget * .123), phase: "Post" },
     { month: "Mo 7", inflows: 0, outflows: -Math.round(actualBudget * .108), phase: "Post" },
     { month: "Mo 8", inflows: 0, outflows: -Math.round(actualBudget * .083), phase: "Post" },
-    { month: "Mo 9", inflows: 0, outflows: -Math.round(actualBudget * .003), phase: "Delivery" },
-    { month: "Mo 10", inflows: 0, outflows: -Math.round(actualBudget * .003), phase: "Delivery" },
-    { month: "Mo 11", inflows: Math.round(rt.base * .12), outflows: -Math.round(drAmt), phase: "Distrib." },
-    { month: "Mo 12", inflows: Math.round(rt.base * .30) + tc, outflows: 0, phase: "Distrib." },
-    { month: "Mo 18", inflows: Math.round(rt.base * .08), outflows: 0, phase: "Distrib." },
-    { month: "Mo 24+", inflows: Math.round(rt.base * .10), outflows: 0, phase: "Distrib." },
+    { month: "Mo 9", inflows: 0, outflows: -Math.round(actualBudget * .028), phase: "Delivery" },
+    { month: "Mo 10", inflows: 0, outflows: -Math.round(actualBudget * .027), phase: "Delivery" },
+    { month: "Mo 11", inflows: Math.round(rt.base * .15), outflows: -Math.round(drAmt), phase: "Distrib." },
+    { month: "Mo 12", inflows: Math.round(rt.base * .35) + tc, outflows: 0, phase: "Distrib." },
+    { month: "Mo 18", inflows: Math.round(rt.base * .25), outflows: 0, phase: "Distrib." },
+    { month: "Mo 24+", inflows: Math.round(rt.base * .25), outflows: 0, phase: "Distrib." },
   ];
   let cum = 0; cf.forEach(x => { cum += x.inflows + x.outflows; x.cumulative = cum; x.net = x.inflows + x.outflows; });
-  function cBE(ep, df, pa, sa) { const n = (1 - ep * .5) * (1 - df) * (1 - sa * .3); return n > 0 ? Math.round((eq * (1 + inp.recoupPremium / 100) + drAmt + pa) / n) : Infinity; }
+  function cBE(ep, df, pa, sa) { const n = (1 - ep) * (1 - df) * (1 - sa); return n > 0 ? Math.round((eq * (1 + inp.recoupPremium / 100) + drAmt + pa) / n) : Infinity; }
   const be = [
     { strategy: "SVOD-First", breakeven: cBE(0, .25, 0, .10) },
     { strategy: "Limited Theatrical", breakeven: cBE(inp.exhibitorPct / 100, inp.distFeePct / 100, inp.paBudget, inp.saCommPct / 100) },
